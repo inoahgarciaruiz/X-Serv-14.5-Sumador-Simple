@@ -5,6 +5,22 @@ import socket
 import calculadora
 
 
+"""
+____________________________ Calculadora.py ____________________________
+
+   Make a web app that makes a two-step sum.
+
+   The program must be able to execute as:
+      python sumApp.py
+
+________________________________________________________________________
+
+Author: Ainhoa Garcia-Ruiz Fuentes.       Date: 25/02/2018
+Course: Servicios y Aplicaciones en Redes de Ordenadores.
+Partially based on Simple HTTP Server by Jesus M. Gonzalez-Barahona
+and Gregorio Robles:
+https://github.com/CursosWeb/X-Serv-14.1-WebServer
+"""
 
 # Create a TCP objet socket and bind it to a port
 # Port should be 80, but since it needs root privileges,
@@ -31,7 +47,7 @@ try:
         message = recvSocket.recv(2048)
         print('Request received:')
         print(message)
-        
+
         resource = message.split()[1].decode("utf-8").split("/")[1]
         if resource != 'favicon.ico':
             try:
@@ -46,23 +62,23 @@ try:
         if resource != 'favicon.ico':
             if (error == 0 and counter == 0):
                 answer = bytes('HTTP/1.1 200 OK\r\n\r\n' +
-                         '<html><body><h1>Give me another one</h1>' +
-                         '</body></html>\r\n', 'utf-8')
+                               '<html><body><h1>Give me another one</h1>' +
+                               '</body></html>\r\n', 'utf-8')
                 counter = 1
 
             elif (error == 0 and counter == 1):
                 c = calculadora.Calculadora(s1, s2)
                 result = c.suma()
-                aux = str(s1) + " + " + str(s2) + " = " + str(result) 
+                aux = str(s1) + " + " + str(s2) + " = " + str(result)
                 answer = bytes('HTTP/1.1 200 OK\r\n\r\n' +
-                         '<html><body><h1>sumApp</h1><a>' + aux +
-                         '</a></body></html>\r\n', 'utf-8')
+                               '<html><body><h1>sumApp</h1><a>' + aux +
+                               '</a></body></html>\r\n', 'utf-8')
                 counter = 0
 
             elif (error == 1):
-                answer = bytes('HTTP/1.1 400 Bad Request\r\n\r\n' +
-                         '<html><body><h1>[Usage:] http://localhost:1234/"s1/s2"</h1><a>' +
-                         '</a></body></html>\r\n', 'utf-8')
+                answer = bytes('HTTP/1.1 400 Bad Request\r\n\r\n<html>' +
+                               '<body><h1>[Usage:] http://localhost:1234/' +
+                               '"s1/s2"</h1></body></html>\r\n', 'utf-8')
                 counter = 0
                 error = 0
 
